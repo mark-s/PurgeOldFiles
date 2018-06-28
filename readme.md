@@ -1,7 +1,7 @@
 # Purge Old Files
 
 A small tool to delete files older than x number of days and to optionally delete any folders that have become empty.
-You can download the source and hit build, or the latest exe is available here: [https://gitlab.dev.haus/Mark/PurgeOld/raw/master/releases/PurgeOldFiles.exe]
+You can download the source and hit build, or the latest exe is available here: [https://gitlab.dev.haus/Mark/PurgeOld/raw/master/releases/PurgeOldFiles.zip]
 
 ####  !!! USING THIS WILL DELETE FILES! PLEASE BE CAREFUL - MAKE BACKUPS !!!
 #### !!! ENSURE YOU TEST WITH `--test` FIRST !!!
