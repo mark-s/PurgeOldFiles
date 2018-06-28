@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace PurgeOldFiles.Domain
+namespace PurgeOldFiles.CommandLine
 {
-    public static class CommandLineHelpers
+    public static class Helper
     {
         const string EXE_NAME = "PurgeOldFiles.exe";
 

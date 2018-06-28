@@ -17,24 +17,31 @@ namespace PurgeOldFiles.Domain
         }
 
 
-        public void DeleteOldFiles()
+        public FolderCollection DeleteOldFiles()
         {
             foreach (var folder in Folders)
             {
                 folder.DeleteOldFilesInFolder();
+
                 if(folder.FilesDeletedOk == false)
                     Errors.AddRange(folder.FileErrors);
             }
+
+            return this;
         }
 
-        public void DeleteEmptiedFolders()
+        public FolderCollection DeleteEmptiedFolders()
         {
-            foreach (var folder in Folders)
+            // Start at the deepest level
+            foreach (var folder in Folders.OrderByDescending(f => f.Path.Length))
             {
                 folder.DeleteIfEmpty();
+
                 if (folder.DeletedOk == false)
                     Errors.AddRange(folder.Errors);
             }
+
+            return this;
         }
 
 

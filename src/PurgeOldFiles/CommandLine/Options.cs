@@ -2,7 +2,7 @@
 using CommandLine;
 using PurgeOldFiles.Providers;
 
-namespace PurgeOldFiles.Domain
+namespace PurgeOldFiles.CommandLine
 {
     public class Options
     {

@@ -9,6 +9,7 @@ namespace PurgeOldFiles.Domain
     internal class Folder
     {
         private readonly IFolderDeleter _folderDeleter;
+
         public string Path { get; }
         public List<OldFile> OldFiles { get; }
 

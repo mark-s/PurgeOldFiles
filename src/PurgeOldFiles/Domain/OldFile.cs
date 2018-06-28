@@ -7,8 +7,11 @@ namespace PurgeOldFiles.Domain
     internal class OldFile
     {
         private readonly IFileDeleter _fileDeleter;
+
         public string FullPathAndFileName { get; }
+
         public string FileName { get;  }
+
         public string FilePath { get;  }
 
         public bool DeletedOk { get; private set; }
