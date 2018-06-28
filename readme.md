@@ -12,17 +12,21 @@ This requires .net 4.6 to be installed.
 
 ## Examples
 
-__NOTE:__ Append `--test` to get a list of the files/folders THAT WOULD BE deleted WITHOUT actually deleting them,
+__NOTE:__ Append `--test` to get a list of the files/folders THAT WOULD BE deleted WITHOUT actually deleting them
+
    `PurgeOldFiles.exe "c:\SomeFolder\withOldFiles" -d 7 --created --test`
 
 To delete all files with a _modified date_ older than 7 days from the folder and it's sub-folders:
+
 `PurgeOldFiles.exe "c:\SomeFolder\withOldFiles" -d 7 --modified`
    
 To delete all files with a _created date_ older than 7 days from the folder and it's sub-folders
+
 `PurgeOldFiles.exe "c:\SomeFolder\withOldFiles" -d 7 --created`
 
 To delete all files older than(modified|created)  7 days from the folder and it's sub-folders
 **AND** delete any folders that don't have files in anymore
+
 `PurgeOldFiles.exe "c:\SomeFolder\withOldFiles" -d 7  [--modified|--created] --deleteEmptyFolders`
 
 
