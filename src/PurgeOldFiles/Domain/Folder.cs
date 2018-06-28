@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GoodbyeOldFiles.Providers;
+using PurgeOldFiles.Providers;
 
-namespace GoodbyeOldFiles.Domain
+namespace PurgeOldFiles.Domain
 {
     internal class Folder
     {

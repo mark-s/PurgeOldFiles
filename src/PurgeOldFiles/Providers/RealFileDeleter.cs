@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace GoodbyeOldFiles.Providers
+namespace PurgeOldFiles.Providers
 {
     public class RealFileDeleter : IFileDeleter
     {

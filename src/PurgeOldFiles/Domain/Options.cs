@@ -1,15 +1,13 @@
 ﻿using System;
 using CommandLine;
-using GoodbyeOldFiles.Providers;
+using PurgeOldFiles.Providers;
 
-namespace GoodbyeOldFiles.Domain
+namespace PurgeOldFiles.Domain
 {
     public class Options
     {
 
-        [Value(0, MetaName = "folder to clean",
-            HelpText = "Folder to work on.",
-            Required = true)]
+        [Value(0, MetaName = "folder to clean", HelpText = "Folder to work on.", Required = true)]
         public string Folder { get; set; }
 
         [Option('d', "days", Required = true, HelpText = "Delete all files older then x days")]
@@ -40,8 +38,8 @@ namespace GoodbyeOldFiles.Domain
         }
 
 
-        public IFileDeleter FileDeleter 
-            => Test ? (IFileDeleter) new TestFileDeleter() : new RealFileDeleter();
+        public IFileDeleter FileDeleter
+            => Test ? (IFileDeleter)new TestFileDeleter() : new RealFileDeleter();
 
         public IFolderDeleter FolderDeleter
             => Test ? (IFolderDeleter)new TestFolderDeleter() : new RealFolderDeleter();

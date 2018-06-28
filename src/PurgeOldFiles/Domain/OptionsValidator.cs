@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace GoodbyeOldFiles.Domain
+namespace PurgeOldFiles.Domain
 {
     public static class OptionsValidator
     {

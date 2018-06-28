@@ -1,12 +1,15 @@
 ﻿using System;
-using GoodbyeOldFiles.Providers;
+using System.IO;
+using PurgeOldFiles.Providers;
 
-namespace GoodbyeOldFiles.Domain
+namespace PurgeOldFiles.Domain
 {
     internal class OldFile
     {
         private readonly IFileDeleter _fileDeleter;
         public string FullPathAndFileName { get; }
+        public string FileName { get;  }
+        public string FilePath { get;  }
 
         public bool DeletedOk { get; private set; }
 
@@ -14,8 +17,10 @@ namespace GoodbyeOldFiles.Domain
 
         public OldFile(string fullPathAndFileName, IFileDeleter fileDeleter)
         {
-            FullPathAndFileName = fullPathAndFileName;
             _fileDeleter = fileDeleter;
+            FullPathAndFileName = fullPathAndFileName;
+            FileName = Path.GetFileName(fullPathAndFileName);
+            FilePath = Path.GetDirectoryName(fullPathAndFileName);
         }
 
         public void Delete()

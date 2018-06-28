@@ -2,11 +2,10 @@
 using System.IO;
 using System.Linq;
 
-namespace GoodbyeOldFiles.Domain
+namespace PurgeOldFiles.Domain
 {
     public class DeleteService
     {
-
         public static List<string> DeleteAndCleanEmptyFolders(Options options)
         {
             var folderCollection = GetOldFiles(options);
@@ -23,7 +22,6 @@ namespace GoodbyeOldFiles.Domain
 
             return folderCollection.Errors;
         }
-
 
         private static FolderCollection GetOldFiles(Options options)
         {
@@ -45,5 +43,6 @@ namespace GoodbyeOldFiles.Domain
             var fileDate = options.Created ? Directory.GetCreationTime(file) : Directory.GetLastWriteTime(file);
             return fileDate <= options.CutoffDate;
         }
+
     }
 }

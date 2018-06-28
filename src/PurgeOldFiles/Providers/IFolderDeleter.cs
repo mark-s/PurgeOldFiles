@@ -1,4 +1,4 @@
-﻿namespace GoodbyeOldFiles.Providers
+﻿namespace PurgeOldFiles.Providers
 {
     public interface IFolderDeleter
     {
