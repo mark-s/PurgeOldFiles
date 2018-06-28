@@ -1,43 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Dynamic;
 using CommandLine;
+using GoodbyeOldFiles.Domain;
 
 namespace GoodbyeOldFiles
 {
     public class Program
     {
+        private static int _returnCode;
+
         public static int Main(string[] args)
         {
 
-            var options = Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
-                .WithNotParsed(HandleParseError);
+            Parser.Default.ParseArguments<Options>(args)
+               .WithParsed(ValidateAndRun)
+               .WithNotParsed(errors => Console.WriteLine(CommandLineHelpers.GetUsageInfo()));
 
-
-
-
-
-
-
-
-
-            return 0;
+            return _returnCode;
         }
 
-        private static void HandleParseError(IEnumerable<Error> errs)
+        private static void ValidateAndRun(Options options)
         {
-            Console.WriteLine(CommandLineHelpers.GetUsageInfo());
-        }
+            // validate the args
+            var validationCheck = OptionsValidator.IsValid(options);
+            if (validationCheck.result == false)
+            {
+                validationCheck.errors.ForEach(Console.WriteLine);
+                _returnCode = 1;
+                return;
+            }
 
+            // go!
 
-        private static void RunOptionsAndReturnExitCode(Options opts)
-        {
-            if (opts.DeleteEmptyFolders)
-                DeleteService.DeleteAndCleanEmptyFolders(opts);
+            List<string> errors;
+            if (options.DeleteEmptyFolders)
+                errors = DeleteService.DeleteAndCleanEmptyFolders(options);
             else
-                DeleteService.DeleteMessy(opts);
+                errors =DeleteService.DeleteButLeaveEmptyFolders(options);
+
+            errors.ForEach(Console.WriteLine);
+
         }
     }
 
