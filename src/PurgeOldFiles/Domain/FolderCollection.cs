@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PurgeOldFiles.Domain
 {
-    internal class FolderCollection
+    public class FolderCollection
     {
         public List<IFolder> FoldersContainingOldFiles { get; }
         public List<IFolder> AllSubFoldersForCleanUp { get; }

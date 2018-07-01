@@ -4,7 +4,6 @@
 // OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
 using PurgeOldFiles.CommandLine;
@@ -18,57 +17,47 @@ namespace PurgeOldFiles
 
         public static int Main(string[] args)
         {
-
             Parser.Default.ParseArguments<Options>(args)
-                                   .WithParsed(options =>{Validate(options);
-                                                                           Run(options);})
+                                   .WithParsed(options =>
+                                   {
+                                       if (Validate(options))
+                                           Run(options);
+                                   })
                                    .WithNotParsed(errors => Console.WriteLine(Helper.GetUsageInfo()));
 
-            Console.ReadKey();
 
+#if DEBUG
+            Console.ReadKey();
+#endif
             return _returnCode;
         }
 
-        private static void Validate(Options options)
+        private static bool Validate(Options options)
         {
-            // validate the args
             var validationCheck = OptionsValidator.IsValid(options);
-            if (validationCheck.result == false)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                {
-                    validationCheck.errors.ForEach(Console.WriteLine);
-                }
-                Console.ResetColor();
 
+            Console.ForegroundColor = ConsoleColor.Red;
+            validationCheck.errors.ForEach(Console.WriteLine);
+            Console.ResetColor();
+
+            if (validationCheck.isValid == false)
                 _returnCode = 1;
-            }
+
+            return validationCheck.isValid;
         }
 
         private static void Run(Options options)
         {
-            List<string> errors = new List<string>();
+            var config = new DeleteConfiguration(options);
 
-            if (options.DeleteEmptiedFolders)
-                errors = DeleteService.DeleteAndCleanEmptiedFolders(options);
-
-            if (options.DeleteAllEmptyFolders)
-                errors = DeleteService.DeleteAndCleanAllEmptyFolders(options);
-
-            if (options.DeleteEmptiedFolders == false)
-                errors = DeleteService.DeleteButLeaveEmptyFolders(options);
-
-            
+            var errors = DeleteService.Delete(config);
 
             Console.ForegroundColor = ConsoleColor.Red;
-            {
-                errors.ForEach(Console.WriteLine);
-            }
+            errors.ForEach(Console.WriteLine);
             Console.ResetColor();
 
             if (errors.Any())
                 _returnCode = 1;
-
         }
     }
 

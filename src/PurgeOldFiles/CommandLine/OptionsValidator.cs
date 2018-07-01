@@ -8,16 +8,24 @@ namespace PurgeOldFiles.CommandLine
     public static class OptionsValidator
     {
 
-        public static (bool result, List<string> errors) IsValid(Options options)
+        public static (bool isValid, List<string> errors) IsValid(Options options)
         {
             var errors = new List<string>();
 
             var pathCheck = CheckPath(options.Folder);
-            if(pathCheck.isValid == false)
+            if (pathCheck.isValid == false)
                 errors.Add(pathCheck.message);
 
-            if(options.DaysBefore <= 0)
+            if (options.DaysBefore <= 0)
                 errors.Add("Days must be a positive number");
+
+            var deleteValidation = CheckFolderDeleteChoice(options);
+            if (deleteValidation.isValid == false)
+                errors.Add(deleteValidation.message);
+
+            var cmValidation = CheckCreatedModifiedChoice(options);
+            if (cmValidation.isValid == false)
+                errors.Add(cmValidation.message);
 
             return (!errors.Any(), errors);
         }
@@ -34,8 +42,31 @@ namespace PurgeOldFiles.CommandLine
             {
                 return (false, $"Failed to access path: [{path}] [{ex.Message}]");
             }
-
         }
 
+        private static (bool isValid, string message) CheckFolderDeleteChoice(Options options)
+        {
+            var delOptions = new List<bool> {options.DeleteAllEmptyFolders,
+                                                          options.DeleteEmptiedFolders,
+                                                          options.DontDeleteEmptyFolders};
+
+            // check there is one and only one folder delete option selected
+            if (delOptions.Count(o => o == true) == 1)
+                return (true, string.Empty);
+            else
+                return (false, "Chose one folder delete option!");
+        }
+
+
+        private static (bool isValid, string message) CheckCreatedModifiedChoice(Options options)
+        {
+            var cmOptions = new List<bool> {options.Created,options.Modified};
+
+            // check there is one and only one option selected from created / modified
+            if (cmOptions.Count(o => o == true) == 1)
+                return (true, string.Empty);
+            else
+                return (false, "Chose either created / modified!");
+        }
     }
 }

@@ -1,62 +1,43 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using PurgeOldFiles.CommandLine;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PurgeOldFiles.Domain
 {
     public class DeleteService
     {
-        public static List<string> DeleteAndCleanEmptiedFolders(Options options)
+        public static List<string> Delete(DeleteConfiguration config)
         {
-            return GetOldFiles(options)
-                        .DeleteOldFiles()
-                        .DeleteEmptiedFolders()
-                        .Errors;
+            switch (config.FolderDeleteOption)
+            {
+                case FolderDeleteOption.DeleteEmptiedFolders:
+                    return DeleteAndCleanEmptiedFolders(config);
+
+                case FolderDeleteOption.DeleteAllEmptyFolders:
+                    return DeleteAndCleanAllEmptyFolders(config);
+
+                case FolderDeleteOption.NoDeleteEmptyFolders:
+                    return DeleteButLeaveEmptyFolders(config);
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(config.FolderDeleteOption));
+            }
         }
 
-        public static List<string> DeleteAndCleanAllEmptyFolders(Options options)
-        {
-            return GetOldFiles(options)
-                .DeleteOldFiles()
-                .DeleteAllEmptyFolders()
-                .Errors;
-        }
+        private static List<string> DeleteAndCleanEmptiedFolders(DeleteConfiguration config)
+            => OldFileHelper.GetOldFiles(config)
+                                .DeleteOldFiles()
+                                .DeleteEmptiedFolders()
+                                .Errors;
 
-        public static List<string> DeleteButLeaveEmptyFolders(Options options)
-        {
-            return GetOldFiles(options)
-                        .DeleteOldFiles()
-                        .Errors;
-        }
+        private static List<string> DeleteAndCleanAllEmptyFolders(DeleteConfiguration config)
+            => OldFileHelper.GetOldFiles(config)
+                                .DeleteOldFiles()
+                                .DeleteAllEmptyFolders()
+                                .Errors;
 
-        private static FolderCollection GetOldFiles(Options options)
-        {
-            var allFiles = Directory.GetFileSystemEntries(options.Folder, "*.*", SearchOption.AllDirectories);
-
-            var oldFiles = allFiles.Where(f => IsFileOld(f, options))
-                                                .Select(f => new OldFile(f, options.FileDeleter))
-                                                .ToList();
-
-            var folders = oldFiles.GroupBy(f => f.FilePath)
-                                               .Select(fg => new Folder(fg.Key, fg.ToList(), options.FolderDeleter))
-                                               .ToList<IFolder>();
-
-            var allSubFolders = Directory.EnumerateDirectories(options.Folder, "*", SearchOption.AllDirectories)
-                                                .Select(f => new FolderOnly(f, options.FolderDeleter))
-                                                .ToList<IFolder>();
-
-
-            return new FolderCollection(folders, allSubFolders);
-        }
-
-        private static bool IsFileOld(string file, Options options)
-        {
-            if (options.Created)
-                return File.GetCreationTime(file) <= options.CutoffDate;
-            else
-                return File.GetLastWriteTime(file) <= options.CutoffDate;
-        }
-
+        private static List<string> DeleteButLeaveEmptyFolders(DeleteConfiguration config)
+            => OldFileHelper.GetOldFiles(config)
+                                .DeleteOldFiles()
+                                .Errors;
     }
 }

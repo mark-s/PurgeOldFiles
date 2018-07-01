@@ -2,7 +2,7 @@
 
 namespace PurgeOldFiles.Domain
 {
-    internal interface IFolder
+    public interface IFolder
     {
         bool DeletedOk { get; }
         List<string> Errors { get; }
