@@ -1,9 +1,14 @@
 ﻿using System;
+using System.IO;
 
 namespace PurgeOldFiles.Providers
 {
     public class TestFileDeleter : IFileDeleter
     {
-        public void Delete(string filename) => Console.WriteLine($"[TEST] Deleted file: {filename}");
+        public void Delete(string filename)
+        {
+            var fileInfo = new FileInfo(filename);
+            Console.WriteLine($"[TEST][c:{fileInfo.CreationTime.ToShortDateString()}][m:{fileInfo.LastWriteTime.ToShortDateString()}] File: {filename}");
+        }
     }
 }

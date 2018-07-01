@@ -17,7 +17,7 @@ namespace PurgeOldFiles.Domain
             get
             {
                 if (_cutoffDate.HasValue == false)
-                    _cutoffDate = DateTime.Now.AddDays(-_options.DaysBefore);
+                    _cutoffDate = DateTime.Today.AddDays(-_options.DaysBefore);
 
                 return _cutoffDate.Value;
             }
