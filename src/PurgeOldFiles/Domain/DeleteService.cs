@@ -7,12 +7,20 @@ namespace PurgeOldFiles.Domain
 {
     public class DeleteService
     {
-        public static List<string> DeleteAndCleanEmptyFolders(Options options)
+        public static List<string> DeleteAndCleanEmptiedFolders(Options options)
         {
             return GetOldFiles(options)
                         .DeleteOldFiles()
                         .DeleteEmptiedFolders()
                         .Errors;
+        }
+
+        public static List<string> DeleteAndCleanAllEmptyFolders(Options options)
+        {
+            return GetOldFiles(options)
+                .DeleteOldFiles()
+                .DeleteAllEmptyFolders()
+                .Errors;
         }
 
         public static List<string> DeleteButLeaveEmptyFolders(Options options)
@@ -32,9 +40,14 @@ namespace PurgeOldFiles.Domain
 
             var folders = oldFiles.GroupBy(f => f.FilePath)
                                                .Select(fg => new Folder(fg.Key, fg.ToList(), options.FolderDeleter))
-                                               .ToList();
+                                               .ToList<IFolder>();
 
-            return new FolderCollection(folders);
+            var allSubFolders = Directory.EnumerateDirectories(options.Folder, "*", SearchOption.AllDirectories)
+                                                .Select(f => new FolderOnly(f, options.FolderDeleter))
+                                                .ToList<IFolder>();
+
+
+            return new FolderCollection(folders, allSubFolders);
         }
 
         private static bool IsFileOld(string file, Options options)

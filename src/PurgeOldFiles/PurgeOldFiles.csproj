@@ -45,9 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\Helper.cs" />
+    <Compile Include="Domain\Config.cs" />
     <Compile Include="Domain\DeleteService.cs" />
     <Compile Include="Domain\Folder.cs" />
     <Compile Include="Domain\FolderCollection.cs" />
+    <Compile Include="Domain\FolderOnly.cs" />
+    <Compile Include="Domain\IFolder.cs" />
     <Compile Include="Domain\OldFile.cs" />
     <Compile Include="CommandLine\Options.cs" />
     <Compile Include="CommandLine\OptionsValidator.cs" />

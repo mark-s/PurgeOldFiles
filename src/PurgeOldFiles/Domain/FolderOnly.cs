@@ -6,33 +6,24 @@ using PurgeOldFiles.Providers;
 
 namespace PurgeOldFiles.Domain
 {
-    internal class Folder : IFolder
+    public class FolderOnly : IFolder
     {
         private readonly IFolderDeleter _folderDeleter;
 
         public string Path { get; }
-        public List<OldFile> OldFiles { get; }
+        public List<OldFile> OldFiles { get; } = new List<OldFile>(0);
 
-        public bool FilesDeletedOk => !FileErrors.Any();
-        public List<string> FileErrors { get; } = new List<string>();
+        public bool FilesDeletedOk { get; } = true;
+        public List<string> FileErrors { get; } = new List<string>(0);
 
         public bool DeletedOk => !Errors.Any();
         public List<string> Errors { get; } = new List<string>();
 
 
-        public Folder(string path, List<OldFile> oldFiles, IFolderDeleter folderDeleter)
+        public FolderOnly(string path, IFolderDeleter folderDeleter)
         {
             _folderDeleter = folderDeleter;
             Path = path;
-            OldFiles = oldFiles;
-        }
-
-        public void DeleteOldFilesInFolder()
-        {
-            OldFiles.ForEach(f => f.Delete());
-
-            if (OldFiles.Any(f => f.DeletedOk == false))
-                FileErrors.AddRange(OldFiles.Where(f => f.DeletedOk == false).Select(f => f.ErrorMessage));
         }
 
         public void DeleteIfEmpty()
@@ -47,5 +38,8 @@ namespace PurgeOldFiles.Domain
                 Errors.Add(ex.Message);
             }
         }
+
+        public void DeleteOldFilesInFolder() 
+            => throw new NotSupportedException("Use the Folder class for folders with files in!");
     }
 }

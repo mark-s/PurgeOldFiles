@@ -4,7 +4,7 @@ using PurgeOldFiles.Providers;
 
 namespace PurgeOldFiles.Domain
 {
-    internal class OldFile
+    public class OldFile
     {
         private readonly IFileDeleter _fileDeleter;
 

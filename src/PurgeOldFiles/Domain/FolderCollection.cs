@@ -1,25 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PurgeOldFiles.Domain
 {
     internal class FolderCollection
     {
-        public List<Folder> Folders { get; }
+        public List<IFolder> FoldersContainingOldFiles { get; }
+        public List<IFolder> AllSubFoldersForCleanUp { get; }
 
         public List<string> Errors { get; } = new List<string>();
 
         public bool HasErrors => !Errors.Any();
 
-        public FolderCollection(List<Folder> folders)
+        public FolderCollection(List<IFolder> foldersContainingOldFiles, List<IFolder> allSubFoldersForCleanUp)
         {
-            Folders = folders;
+            FoldersContainingOldFiles = foldersContainingOldFiles;
+            AllSubFoldersForCleanUp = allSubFoldersForCleanUp;
         }
 
 
         public FolderCollection DeleteOldFiles()
         {
-            foreach (var folder in Folders)
+            foreach (var folder in FoldersContainingOldFiles)
             {
                 folder.DeleteOldFilesInFolder();
 
@@ -33,7 +36,7 @@ namespace PurgeOldFiles.Domain
         public FolderCollection DeleteEmptiedFolders()
         {
             // Start at the deepest level
-            foreach (var folder in Folders.OrderByDescending(f => f.Path.Length))
+            foreach (var folder in FoldersContainingOldFiles.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
             {
                 folder.DeleteIfEmpty();
 
@@ -44,6 +47,20 @@ namespace PurgeOldFiles.Domain
             return this;
         }
 
+
+        public FolderCollection DeleteAllEmptyFolders()
+        {
+            // Start at the deepest level
+            foreach (var folder in AllSubFoldersForCleanUp.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
+            {
+                folder.DeleteIfEmpty();
+
+                if (folder.DeletedOk == false)
+                    Errors.AddRange(folder.Errors);
+            }
+
+            return this;
+        }
 
     }
 }

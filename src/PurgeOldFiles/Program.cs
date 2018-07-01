@@ -24,6 +24,8 @@ namespace PurgeOldFiles
                                                                            Run(options);})
                                    .WithNotParsed(errors => Console.WriteLine(Helper.GetUsageInfo()));
 
+            Console.ReadKey();
+
             return _returnCode;
         }
 
@@ -45,12 +47,18 @@ namespace PurgeOldFiles
 
         private static void Run(Options options)
         {
-            List<string> errors;
+            List<string> errors = new List<string>();
 
-            if (options.DeleteEmptyFolders)
-                errors = DeleteService.DeleteAndCleanEmptyFolders(options);
-            else
-                errors =DeleteService.DeleteButLeaveEmptyFolders(options);
+            if (options.DeleteEmptiedFolders)
+                errors = DeleteService.DeleteAndCleanEmptiedFolders(options);
+
+            if (options.DeleteAllEmptyFolders)
+                errors = DeleteService.DeleteAndCleanAllEmptyFolders(options);
+
+            if (options.DeleteEmptiedFolders == false)
+                errors = DeleteService.DeleteButLeaveEmptyFolders(options);
+
+            
 
             Console.ForegroundColor = ConsoleColor.Red;
             {
