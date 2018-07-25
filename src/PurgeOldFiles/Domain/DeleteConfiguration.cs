@@ -24,10 +24,10 @@ namespace PurgeOldFiles.Domain
         }
 
         public IFileDeleter FileDeleter
-            => _options.Test ? (IFileDeleter)new TestFileDeleter() : new RealFileDeleter();
+            => _options.UseTestMode ? (IFileDeleter)new TestFileDeleter() : new RealFileDeleter();
 
         public IFolderDeleter FolderDeleter
-            => _options.Test ? (IFolderDeleter)new TestFolderDeleter() : new RealFolderDeleter();
+            => _options.UseTestMode ? (IFolderDeleter)new TestFolderDeleter() : new RealFolderDeleter();
 
         public Predicate<string> IsFileOld { get; private set; }
 
@@ -37,12 +37,21 @@ namespace PurgeOldFiles.Domain
         {
             _options = options;
 
-            ChoseFileDateToCheck(options);
+            SetFileDateChecker(options);
 
-            GetFolderDeleteSetting(options);
+            SetFolderDeleteMode(options);
         }
 
-        private void GetFolderDeleteSetting(Options options)
+        private void SetFileDateChecker(Options options)
+        {
+            if (options.Created)
+                IsFileOld = file => File.GetCreationTime(file) <= CutoffDate;
+
+            if (options.Modified)
+                IsFileOld = file => File.GetLastWriteTime(file) <= CutoffDate;
+        }
+
+        private void SetFolderDeleteMode(Options options)
         {
             if (options.DeleteEmptiedFolders)
                 FolderDeleteOption = FolderDeleteOption.DeleteEmptiedFolders;
@@ -53,17 +62,5 @@ namespace PurgeOldFiles.Domain
             if (options.DontDeleteEmptyFolders)
                 FolderDeleteOption = FolderDeleteOption.NoDeleteEmptyFolders;
         }
-
-        private void ChoseFileDateToCheck(Options options)
-        {
-            if (options.Created)
-                IsFileOld = file => File.GetCreationTime(file) <= CutoffDate;
-
-            if (options.Modified)
-                IsFileOld = file => File.GetLastWriteTime(file) <= CutoffDate;
-        }
-
-
-
     }
 }

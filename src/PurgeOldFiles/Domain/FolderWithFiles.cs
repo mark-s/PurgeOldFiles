@@ -6,12 +6,12 @@ using PurgeOldFiles.Providers;
 
 namespace PurgeOldFiles.Domain
 {
-    internal class Folder : IFolder
+    public class FolderWithFiles
     {
         private readonly IFolderDeleter _folderDeleter;
+        private readonly List<OldFile> _oldFilesInThisFolder;
 
         public string Path { get; }
-        public List<OldFile> OldFiles { get; }
 
         public bool FilesDeletedOk => !FileErrors.Any();
         public List<string> FileErrors { get; } = new List<string>();
@@ -20,19 +20,19 @@ namespace PurgeOldFiles.Domain
         public List<string> Errors { get; } = new List<string>();
 
 
-        public Folder(string path, List<OldFile> oldFiles, IFolderDeleter folderDeleter)
+        public FolderWithFiles(string path, List<OldFile> oldFiles, IFolderDeleter folderDeleter)
         {
-            _folderDeleter = folderDeleter;
             Path = path;
-            OldFiles = oldFiles;
+            _folderDeleter = folderDeleter;
+            _oldFilesInThisFolder = oldFiles;
         }
 
-        public void DeleteOldFilesInFolder()
+        public void DeleteOldFiles()
         {
-            OldFiles.ForEach(f => f.Delete());
+            _oldFilesInThisFolder.ForEach(f => f.Delete());
 
-            if (OldFiles.Any(f => f.DeletedOk == false))
-                FileErrors.AddRange(OldFiles.Where(f => f.DeletedOk == false).Select(f => f.ErrorMessage));
+            if (_oldFilesInThisFolder.Any(f => f.DeletedOk == false))
+                FileErrors.AddRange(_oldFilesInThisFolder.Where(f => f.DeletedOk == false).Select(f => f.ErrorMessage));
         }
 
         public void DeleteIfEmpty()

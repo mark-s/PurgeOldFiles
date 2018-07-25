@@ -2,7 +2,7 @@
 
 namespace PurgeOldFiles.CommandLine
 {
-    public static class Helper
+    public static class Info
     {
         private static readonly string EXE_NAME = AppDomain.CurrentDomain.FriendlyName;
 
@@ -31,9 +31,6 @@ namespace PurgeOldFiles.CommandLine
                + EXE_NAME + " \"c:\\SomeFolder\\withOldFiles\" -d 7  [--modified|--created] --deleteEmptyFolders" + Environment.NewLine
                + "   Will delete all files older than(modified|created)  7 days from the folder and it's sub-folders " + Environment.NewLine
                + "   AND delete any folders that don't have files in anymore";
-
-
-
-
     }
+
 }

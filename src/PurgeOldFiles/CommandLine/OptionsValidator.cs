@@ -8,7 +8,7 @@ namespace PurgeOldFiles.CommandLine
     public static class OptionsValidator
     {
 
-        public static (bool isValid, List<string> errors) IsValid(Options options)
+        public static (bool isValid, List<string> errors) Validate(Options options)
         {
             var errors = new List<string>();
 
@@ -56,7 +56,6 @@ namespace PurgeOldFiles.CommandLine
             else
                 return (false, "Chose one folder delete option!");
         }
-
 
         private static (bool isValid, string message) CheckCreatedModifiedChoice(Options options)
         {

@@ -13,7 +13,10 @@ namespace PurgeOldFiles
 {
     public class Program
     {
-        private static int _returnCode; // 0 - success, 1 - error
+        private const int SUCCESS = 0;
+        private const int FAILURE = 1;
+
+        private static int _returnCode = SUCCESS;
 
         public static int Main(string[] args)
         {
@@ -23,42 +26,44 @@ namespace PurgeOldFiles
                                        if (Validate(options))
                                            Run(options);
                                    })
-                                   .WithNotParsed(errors => Console.WriteLine(Helper.GetUsageInfo()));
-
+                                   .WithNotParsed(errors => Console.WriteLine(Info.GetUsageInfo()));
 
 #if DEBUG
             Console.ReadKey();
 #endif
+
             return _returnCode;
         }
 
         private static bool Validate(Options options)
         {
-            var validationCheck = OptionsValidator.IsValid(options);
+            var validationResult = OptionsValidator.Validate(options);
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            validationCheck.errors.ForEach(Console.WriteLine);
-            Console.ResetColor();
+            if (validationResult.isValid == false)
+            {
+                ConsoleHelpers.WriteErrors(validationResult.errors);
+                _returnCode = FAILURE;
+            }
 
-            if (validationCheck.isValid == false)
-                _returnCode = 1;
-
-            return validationCheck.isValid;
+            return validationResult.isValid;
         }
 
         private static void Run(Options options)
         {
+            // 'parse' the commandline options
             var config = new DeleteConfiguration(options);
 
+            // Run the Delete/Purge
             var errors = DeleteService.Delete(config);
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            errors.ForEach(Console.WriteLine);
-            Console.ResetColor();
-
             if (errors.Any())
-                _returnCode = 1;
-        }
-    }
+            {
+                ConsoleHelpers.WriteErrors(errors);
+                _returnCode = FAILURE;
+            }
 
+        }
+
+
+    }
 }

@@ -6,28 +6,24 @@ namespace PurgeOldFiles.Domain
 {
     public class FolderCollection
     {
-        public List<IFolder> FoldersContainingOldFiles { get; }
-        public List<IFolder> AllSubFoldersForCleanUp { get; }
+        private readonly List<FolderWithFiles> _foldersContainingOldFiles;
+        private readonly List<SubFolder> _foldersForCleanUp;
+        private readonly List<string> _errors  = new List<string>();
 
-        public List<string> Errors { get; } = new List<string>();
-
-        public bool HasErrors => !Errors.Any();
-
-        public FolderCollection(List<IFolder> foldersContainingOldFiles, List<IFolder> allSubFoldersForCleanUp)
+        public FolderCollection(List<FolderWithFiles> foldersContainingOldFiles, List<SubFolder> foldersForCleanUp)
         {
-            FoldersContainingOldFiles = foldersContainingOldFiles;
-            AllSubFoldersForCleanUp = allSubFoldersForCleanUp;
+            _foldersContainingOldFiles = foldersContainingOldFiles;
+            _foldersForCleanUp = foldersForCleanUp;
         }
-
-
+        
         public FolderCollection DeleteOldFiles()
         {
-            foreach (var folder in FoldersContainingOldFiles)
+            foreach (var folder in _foldersContainingOldFiles)
             {
-                folder.DeleteOldFilesInFolder();
+                folder.DeleteOldFiles();
 
                 if(folder.FilesDeletedOk == false)
-                    Errors.AddRange(folder.FileErrors);
+                    _errors.AddRange(folder.FileErrors);
             }
 
             return this;
@@ -36,31 +32,31 @@ namespace PurgeOldFiles.Domain
         public FolderCollection DeleteEmptiedFolders()
         {
             // Start at the deepest level
-            foreach (var folder in FoldersContainingOldFiles.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
+            foreach (var folder in _foldersContainingOldFiles.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
             {
                 folder.DeleteIfEmpty();
 
                 if (folder.DeletedOk == false)
-                    Errors.AddRange(folder.Errors);
+                    _errors.AddRange(folder.Errors);
             }
 
             return this;
         }
-
 
         public FolderCollection DeleteAllEmptyFolders()
         {
             // Start at the deepest level
-            foreach (var folder in AllSubFoldersForCleanUp.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
+            foreach (var folder in _foldersForCleanUp.OrderByDescending(f => f.Path.Count(c => c == Path.DirectorySeparatorChar)))
             {
                 folder.DeleteIfEmpty();
 
                 if (folder.DeletedOk == false)
-                    Errors.AddRange(folder.Errors);
+                    _errors.AddRange(folder.Errors);
             }
 
             return this;
         }
 
+        public IReadOnlyList<string> GetErrors() => _errors.AsReadOnly();
     }
 }

@@ -3,8 +3,9 @@ using System.Linq;
 
 namespace PurgeOldFiles.Domain
 {
-    public static class OldFileHelper
+    public static class FileSystem
     {
+
         public static FolderCollection GetOldFiles(DeleteConfiguration config)
         {
             var allFiles = Directory.GetFileSystemEntries(config.Folder, "*.*", SearchOption.AllDirectories);
@@ -13,16 +14,16 @@ namespace PurgeOldFiles.Domain
                 .Select(f => new OldFile(f, config.FileDeleter))
                 .ToList();
 
-            var folders = oldFiles.GroupBy(f => f.FilePath)
-                .Select(fg => new Folder(fg.Key, fg.ToList(), config.FolderDeleter))
-                .ToList<IFolder>();
+            var foldersWithOldFiles = oldFiles.GroupBy(f => f.FilePath)
+                .Select(fg => new FolderWithFiles(fg.Key, fg.ToList(), config.FolderDeleter))
+                .ToList();
 
             var allSubFolders = Directory.EnumerateDirectories(config.Folder, "*", SearchOption.AllDirectories)
-                .Select(f => new FolderOnly(f, config.FolderDeleter))
-                .ToList<IFolder>();
+                .Select(f => new SubFolder(f, config.FolderDeleter))
+                .ToList();
 
 
-            return new FolderCollection(folders, allSubFolders);
+            return new FolderCollection(foldersWithOldFiles, allSubFolders);
         }
 
 

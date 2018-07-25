@@ -18,7 +18,7 @@ namespace PurgeOldFiles.Domain
 
         public string ErrorMessage { get; private set; }
 
-        public OldFile(string fullPathAndFileName, IFileDeleter fileDeleter)
+        internal OldFile(string fullPathAndFileName, IFileDeleter fileDeleter)
         {
             _fileDeleter = fileDeleter;
             FullPathAndFileName = fullPathAndFileName;
@@ -26,7 +26,7 @@ namespace PurgeOldFiles.Domain
             FilePath = Path.GetDirectoryName(fullPathAndFileName);
         }
 
-        public void Delete()
+        internal void Delete()
         {
             try
             {

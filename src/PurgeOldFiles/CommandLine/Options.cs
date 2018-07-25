@@ -17,7 +17,7 @@ namespace PurgeOldFiles.CommandLine
         public bool Modified { get; set; }
         
         [Option(Default = false, HelpText = "Test run only - don't delete anything!")]
-        public bool Test { get; set; }
+        public bool UseTestMode { get; set; }
 
         [Option('e', "emptiedFolders", Default = false, HelpText = "Delete folders that became empty because of the file purge")]
         public bool DeleteEmptiedFolders { get; set; }

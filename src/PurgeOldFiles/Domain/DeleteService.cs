@@ -3,41 +3,41 @@ using System.Collections.Generic;
 
 namespace PurgeOldFiles.Domain
 {
-    public class DeleteService
+    internal static class DeleteService
     {
-        public static List<string> Delete(DeleteConfiguration config)
+        public static IReadOnlyList<string> Delete(DeleteConfiguration config)
         {
             switch (config.FolderDeleteOption)
             {
                 case FolderDeleteOption.DeleteEmptiedFolders:
-                    return DeleteAndCleanEmptiedFolders(config);
+                    return DeleteFilesAndDeleteEmptiedFolders(config);
 
                 case FolderDeleteOption.DeleteAllEmptyFolders:
-                    return DeleteAndCleanAllEmptyFolders(config);
+                    return DeleteFilesAndDeleteAllEmptyFolders(config);
 
                 case FolderDeleteOption.NoDeleteEmptyFolders:
-                    return DeleteButLeaveEmptyFolders(config);
+                    return OnlyDeleteFiles(config);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(config.FolderDeleteOption));
             }
         }
 
-        private static List<string> DeleteAndCleanEmptiedFolders(DeleteConfiguration config)
-            => OldFileHelper.GetOldFiles(config)
-                                .DeleteOldFiles()
-                                .DeleteEmptiedFolders()
-                                .Errors;
+        private static IReadOnlyList<string> DeleteFilesAndDeleteEmptiedFolders(DeleteConfiguration config)
+            => FileSystem.GetOldFiles(config)
+                                       .DeleteOldFiles()
+                                       .DeleteEmptiedFolders()
+                                       .GetErrors();
 
-        private static List<string> DeleteAndCleanAllEmptyFolders(DeleteConfiguration config)
-            => OldFileHelper.GetOldFiles(config)
-                                .DeleteOldFiles()
-                                .DeleteAllEmptyFolders()
-                                .Errors;
+        private static IReadOnlyList<string> DeleteFilesAndDeleteAllEmptyFolders(DeleteConfiguration config)
+            => FileSystem.GetOldFiles(config)
+                                       .DeleteOldFiles()
+                                       .DeleteAllEmptyFolders()
+                                       .GetErrors();
 
-        private static List<string> DeleteButLeaveEmptyFolders(DeleteConfiguration config)
-            => OldFileHelper.GetOldFiles(config)
-                                .DeleteOldFiles()
-                                .Errors;
+        private static IReadOnlyList<string> OnlyDeleteFiles(DeleteConfiguration config)
+            => FileSystem.GetOldFiles(config)
+                                       .DeleteOldFiles()
+                                       .GetErrors();
     }
 }
