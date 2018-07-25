@@ -22,11 +22,15 @@ namespace PurgeOldFiles
         {
             Parser.Default.ParseArguments<Options>(args)
                                    .WithParsed(options =>
-                                   {
-                                       if (Validate(options))
-                                           Run(options);
-                                   })
-                                   .WithNotParsed(errors => Console.WriteLine(Info.GetUsageInfo()));
+                                               {
+                                                   if (Validate(options))
+                                                       Run(options);
+                                               })
+                                   .WithNotParsed(errors =>
+                                                {
+                                                    Console.WriteLine(Info.GetUsageInfo());
+                                                    _returnCode = FAILURE;
+                                                });
 
 #if DEBUG
             Console.ReadKey();

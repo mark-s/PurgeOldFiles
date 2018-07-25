@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace PurgeOldFiles.Providers
+namespace PurgeOldFiles.Deleters
 {
     public class TestFileDeleter : IFileDeleter
     {

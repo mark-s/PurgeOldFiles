@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace PurgeOldFiles.Providers
+namespace PurgeOldFiles.Deleters
 {
     public class RealFolderDeleter : IFolderDeleter
     {

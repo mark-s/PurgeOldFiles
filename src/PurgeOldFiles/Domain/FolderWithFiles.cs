@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using PurgeOldFiles.Providers;
+using PurgeOldFiles.Deleters;
 
 namespace PurgeOldFiles.Domain
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PurgeOldFiles
+namespace PurgeOldFiles.CommandLine
 {
     internal static class ConsoleHelpers
     {

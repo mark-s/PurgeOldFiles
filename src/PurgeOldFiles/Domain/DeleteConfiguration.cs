@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using PurgeOldFiles.CommandLine;
-using PurgeOldFiles.Providers;
+using PurgeOldFiles.Deleters;
 
 namespace PurgeOldFiles.Domain
 {

@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\Info.cs" />
-    <Compile Include="ConsoleHelpers.cs" />
+    <Compile Include="CommandLine\ConsoleHelpers.cs" />
     <Compile Include="Domain\DeleteConfiguration.cs" />
     <Compile Include="Domain\DeleteService.cs" />
     <Compile Include="Domain\FolderWithFiles.cs" />
@@ -58,12 +58,12 @@
     <Compile Include="Domain\FileSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\IFileDeleter.cs" />
-    <Compile Include="Providers\IFolderDeleter.cs" />
-    <Compile Include="Providers\RealFileDeleter.cs" />
-    <Compile Include="Providers\RealFolderDeleter.cs" />
-    <Compile Include="Providers\TestFileDeleter.cs" />
-    <Compile Include="Providers\TestFolderDeleter.cs" />
+    <Compile Include="Deleters\IFileDeleter.cs" />
+    <Compile Include="Deleters\IFolderDeleter.cs" />
+    <Compile Include="Deleters\RealFileDeleter.cs" />
+    <Compile Include="Deleters\RealFolderDeleter.cs" />
+    <Compile Include="Deleters\TestFileDeleter.cs" />
+    <Compile Include="Deleters\TestFolderDeleter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

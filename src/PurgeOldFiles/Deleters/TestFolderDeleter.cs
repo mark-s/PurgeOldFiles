@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PurgeOldFiles.Providers
+namespace PurgeOldFiles.Deleters
 {
     public class TestFolderDeleter : IFolderDeleter
     {
