@@ -16,7 +16,7 @@ namespace PurgeOldFiles.CommandLine
         [Option('m', "modified", Default = false, HelpText = "Use file Modified date")]
         public bool Modified { get; set; }
         
-        [Option(Default = false, HelpText = "Test run only - don't delete anything!")]
+        [Option('t', "test", Default = false, HelpText = "Test run only - don't delete anything!")]
         public bool UseTestMode { get; set; }
 
         [Option('e', "emptiedFolders", Default = false, HelpText = "Delete folders that became empty because of the file purge")]
@@ -27,6 +27,7 @@ namespace PurgeOldFiles.CommandLine
 
         [Option('n', "noDeleteFolders", Default = false, HelpText = "Do not delete any empty folders")]
         public bool DontDeleteEmptyFolders { get; set; }
+
     }
 
 }

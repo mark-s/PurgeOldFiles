@@ -17,7 +17,7 @@ namespace PurgeOldFiles.CommandLine
                 errors.Add(pathCheck.message);
 
             if (options.DaysBefore <= 0)
-                errors.Add("Days must be a positive number");
+                errors.Add($"Days must be a positive number. (Entered: [{options.DaysBefore} ])");
 
             var deleteValidation = CheckFolderDeleteChoice(options);
             if (deleteValidation.isValid == false)
@@ -54,7 +54,7 @@ namespace PurgeOldFiles.CommandLine
             if (delOptions.Count(o => o == true) == 1)
                 return (true, string.Empty);
             else
-                return (false, "Chose one folder delete option!");
+                return (false, "REQUIRED: Chose one folder delete option! [emptiedFolders | allEmptyFolders | noDeleteFolders]");
         }
 
         private static (bool isValid, string message) CheckCreatedModifiedChoice(Options options)
@@ -65,7 +65,7 @@ namespace PurgeOldFiles.CommandLine
             if (cmOptions.Count(o => o == true) == 1)
                 return (true, string.Empty);
             else
-                return (false, "Chose either created / modified!");
+                return (false, "REQUIRED: Chose either: [ created | modified]");
         }
     }
 }
