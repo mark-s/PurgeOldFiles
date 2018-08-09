@@ -20,17 +20,27 @@ namespace PurgeOldFiles
 
         public static int Main(string[] args)
         {
-            Parser.Default.ParseArguments<Options>(args)
-                                   .WithParsed(options =>
-                                               {
-                                                   if (Validate(options))
-                                                       Run(options);
-                                               })
-                                   .WithNotParsed(errors =>
-                                                {
-                                                    Console.WriteLine(Info.GetUsageInfo());
-                                                    _returnCode = FAILURE;
-                                                });
+
+            // If no args, don't display errors - just show the usage info
+            if (args == null || args.Any() == false)
+            {
+                Console.WriteLine(Info.GetUsageInfo());
+                _returnCode = FAILURE;
+            }
+            else
+            {
+                Parser.Default.ParseArguments<Options>(args)
+                                       .WithParsed(options =>
+                                                   {
+                                                       if (Validate(options))
+                                                           Run(options);
+                                                   })
+                                       .WithNotParsed(errors =>
+                                                    {
+                                                        Console.WriteLine(Info.GetUsageInfo());
+                                                        _returnCode = FAILURE;
+                                                    });
+            }
 
 #if DEBUG
             Console.ReadKey();
