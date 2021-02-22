@@ -5,14 +5,7 @@
 # Purge Old Files
 A small tool to delete files older than x number of days and to optionally delete any folders that have become/are empty.  
 
-You can download the source and hit build, or the **latest exe is available here**: [https://gitlab.dev.haus/Mark/PurgeOld/raw/master/releases/PurgeOldFiles.zip]
-
->**The .zip contains:**  
-`PurgeOldFiles.exe`  
-SHA-256: `bc53adc374bd989f16e548fe63a8efd68fe9e6bf7ff0ef66c7a98e53c2b0dced`  
-[VirusTotal results](https://www.virustotal.com/#/file/bc53adc374bd989f16e548fe63a8efd68fe9e6bf7ff0ef66c7a98e53c2b0dced) 
-
-
+You can download the source and hit build, or the **latest exe is available here**: [https://github.com/mark-s/PurgeOldFiles/releases/latest]
 
 ## Prerequisites
 This requires .net 4.6 to be installed.
